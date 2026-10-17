@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' app:; img-src 'self' app: data: blob:; style-src 'self' 'unsafe-inline'" />
+    <title>Photosphere</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <canvas id="stage"></canvas>
+    <div class="titlebar"></div>
+
+    <div id="drop" class="drop" hidden><div>Drop to add</div></div>
+    <div id="notice" class="notice glass" hidden></div>
+    <div id="hint" class="hint" hidden></div>
+
+    <div id="dock" class="dock glass">
+      <div id="strip" class="strip"></div>
+      <button id="add" class="round" title="Add 360° photos (⌘O), or drop them on the window"></button>
+      <div class="divider motion-only"></div>
+      <div class="locks motion-only">
+        <button class="lock" data-setting="lockTurn" data-key="t" title="Lock turning: ignore turning the laptop left and right (T)"></button>
+        <button class="lock" data-setting="lockTilt" data-key="u" title="Lock tilt: keep the view at eye level (U)"></button>
+        <button class="lock" data-setting="level" data-key="l" title="Keep the horizon level when the laptop leans sideways (L)"></button>
+        <button class="lock" data-setting="frozen" data-key="f" title="Freeze the view. Drag to look around (F)"></button>
+      </div>
+      <div class="divider"></div>
+      <button id="recenter" class="icon" title="Recenter: face the middle of the photo (Space)"></button>
+      <button id="open-settings" class="icon" title="Settings (⌘,)"></button>
+    </div>
+
+    <div id="settings" class="sheet-backdrop" hidden>
+      <div class="sheet glass" role="dialog" aria-label="Settings">
+        <header>
+          <h1>Settings</h1>
+          <button id="close-settings" class="icon" title="Close (Esc)"></button>
+        </header>
+
+        <section class="mac-only">
+          <h2>Zoom with pressure</h2>
+          <label class="row">
+            <span>Press harder on the trackpad to zoom</span>
+            <input type="checkbox" class="switch" data-setting="pressureZoom" />
+          </label>
+          <div class="row stacked">
+            <div class="row-title"><span>Sensitivity</span><output data-for="zoomSensitivity"></output></div>
+            <input type="range" min="0" max="1" step="0.01" data-setting="zoomSensitivity" />
+            <div class="scale"><span>Firm press</span><span>Light touch</span></div>
+            <div class="meter" title="Live trackpad pressure. The line is where you reach full zoom.">
+              <div class="meter-fill"></div>
+              <div class="meter-mark"></div>
+            </div>
+            <p class="caption">Press the trackpad to test. Reaching the line gives full zoom.</p>
+          </div>
+        </section>
+
+        <section>
+          <h2>View</h2>
+          <div class="row stacked">
+            <div class="row-title"><span>Maximum zoom</span><output data-for="maxZoom"></output></div>
+            <input type="range" min="1.5" max="8" step="0.5" data-setting="maxZoom" />
+          </div>
+          <div class="row stacked">
+            <div class="row-title"><span>Field of view</span><output data-for="fieldOfView"></output></div>
+            <input type="range" min="45" max="110" step="1" data-setting="fieldOfView" />
+            <div class="scale"><span>Narrow</span><span>Wide</span></div>
+          </div>
+          <div class="row stacked">
+            <div class="row-title"><span>Smoothing</span><output data-for="smoothing"></output></div>
+            <input type="range" min="0" max="0.9" step="0.01" data-setting="smoothing" />
+            <div class="scale"><span>Snappy</span><span>Smooth</span></div>
+          </div>
+          <div class="row stacked">
+            <div class="row-title"><span>Drag speed</span><output data-for="dragSpeed"></output></div>
+            <input type="range" min="0.25" max="3" step="0.05" data-setting="dragSpeed" />
+          </div>
+          <label class="row">
+            <span>Invert drag</span>
+            <input type="checkbox" class="switch" data-setting="invertDrag" />
+          </label>
+        </section>
+
+        <section class="mac-only">
+          <h2>Look around by moving your Mac</h2>
+          <label class="row">
+            <span>Use the motion sensor</span>
+            <input type="checkbox" class="switch" data-setting="motion" />
+          </label>
+          <label class="row">
+            <span>Follow the screen angle<small>Uses the lid angle so you look straight out of the screen</small></span>
+            <input type="checkbox" class="switch" data-setting="followScreenAngle" />
+          </label>
+          <p id="sensor-status" class="caption"></p>
+        </section>
+
+        <section class="not-mac">
+          <h2>On a Mac</h2>
+          <p class="caption">On MacBooks with Apple silicon, Photosphere can use the built-in motion sensor to look around as you move the laptop, and trackpad pressure to zoom.</p>
+        </section>
+
+        <footer>
+          <button id="restore-defaults" class="text-button">Restore defaults</button>
+        </footer>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,106 @@
+{
+  "name": "photosphere",
+  "version": "0.1.0",
+  "description": "View and collect 360° photo spheres. On a Mac, move the laptop to look around.",
+  "main": "src/main.js",
+  "scripts": {
+    "build:renderer": "node scripts/build-renderer.mjs",
+    "build:native": "sh scripts/build-native.sh",
+    "build": "npm run build:renderer && npm run build:native",
+    "start": "npm run build && electron .",
+    "dist": "npm run build && electron-builder"
+  },
+  "author": "Eli Bullock-Papa",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^44.9.0",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2"
+  },
+  "dependencies": {
+    "three": "^0.186.1"
+  },
+  "productName": "Photosphere",
+  "build": {
+    "appId": "com.elibullockpapa.photosphere",
+    "productName": "Photosphere",
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
+    },
+    "files": [
+      "src/main.js",
+      "src/preload.js",
+      "dist/**",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "Samples",
+        "to": "Samples"
+      }
+    ],
+    "fileAssociations": [
+      {
+        "ext": [
+          "jpg",
+          "jpeg",
+          "png",
+          "webp"
+        ],
+        "name": "Image",
+        "role": "Viewer",
+        "rank": "Alternate"
+      }
+    ],
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "category": "public.app-category.photography",
+      "identity": "-",
+      "extraResources": [
+        {
+          "from": "build/photosphere-sensors",
+          "to": "photosphere-sensors"
+        }
+      ],
+      "hardenedRuntime": false
+    },
+    "dmg": {
+      "title": "Photosphere"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": true,
+      "artifactName": "${productName}-${version}-win-${arch}.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Graphics",
+      "artifactName": "${productName}-${version}-linux-${arch}.${ext}"
+    },
+    "publish": {
+      "provider": "github",
+      "releaseType": "release"
+    },
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/elibullockpapa/photosphere.git"
+  },
+  "homepage": "https://github.com/elibullockpapa/photosphere"
+}
