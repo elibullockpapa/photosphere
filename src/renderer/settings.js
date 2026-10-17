@@ -1,7 +1,8 @@
 export const DEFAULTS = {
-  zoomSensitivity: 0.9,
-  maxZoom: 4,
   pressureZoom: true,
+  zoomActivation: 150,
+  zoomSensitivity: 0.85,
+  maxZoom: 4,
   fieldOfView: 72,
   smoothing: 0.35,
   dragSpeed: 1,
@@ -14,7 +15,7 @@ export const DEFAULTS = {
   selected: null,
 };
 
-const KEY = "photosphere.settings";
+const KEY = "photosphere.settings.v2";
 const listeners = new Set();
 
 export const settings = { ...DEFAULTS, ...JSON.parse(localStorage.getItem(KEY) || "{}") };
@@ -29,14 +30,19 @@ export function onChange(listener) {
   listeners.add(listener);
 }
 
-export function restoreDefaults() {
-  for (const key of ["zoomSensitivity", "maxZoom", "pressureZoom", "fieldOfView", "smoothing", "dragSpeed", "invertDrag", "motion", "followScreenAngle"]) {
-    set(key, DEFAULTS[key]);
-  }
+export function restoreDefaults(keys) {
+  for (const key of keys) set(key, DEFAULTS[key]);
 }
 
-/** Trackpad force needed for full zoom: sensitivity 1 is a light touch, 0 a hard press. */
-export const forceForFullZoom = (sensitivity) => 30 + (1 - sensitivity) * 600;
+/**
+ * Pressure zoom does nothing until you press past the activation pressure (so ordinary clicks
+ * never zoom), then goes from 1× to full zoom over a short extra push. Sensitivity sets how short:
+ * at 1 a nudge is enough, at 0 it takes a long press harder.
+ */
+export const zoomRange = (sensitivity) => 15 + (1 - sensitivity) * 330;
 
-/** A resting finger reads a little force; ignore it. */
-export const ZOOM_DEAD_ZONE = 8;
+/** Pressure has to stay past the activation point this long, so a click's spike doesn't zoom. */
+export const ZOOM_HOLD_MS = 90;
+
+/** Once zooming, it lets go only when pressure drops well below the activation point. */
+export const ZOOM_RELEASE = 0.7;

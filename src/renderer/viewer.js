@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { settings, forceForFullZoom, ZOOM_DEAD_ZONE } from "./settings.js";
+import { settings, zoomRange, ZOOM_HOLD_MS, ZOOM_RELEASE } from "./settings.js";
 
 const DEG = Math.PI / 180;
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -157,10 +157,19 @@ export class Viewer {
     this.camera.quaternion.copy(this.shown);
 
     // Zoom: press harder on a Mac trackpad, scroll or pinch everywhere.
-    const force = this.sensors ? this.sensors.force : 0;
-    const full = forceForFullZoom(settings.zoomSensitivity);
-    const pressed = settings.pressureZoom ? clamp((force - ZOOM_DEAD_ZONE) / (full - ZOOM_DEAD_ZONE), 0, 1) : 0;
-    this.pressureZoom += (pressed - this.pressureZoom) * (1 - Math.pow(0.8, dt * 120));
+    const force = this.sensors && settings.pressureZoom && !this.pressureBlocked ? this.sensors.force : 0;
+    const activation = settings.zoomActivation;
+    if (!this.zoomEngaged) {
+      if (force > activation) {
+        this.aboveSince ??= now;
+        if (now - this.aboveSince > ZOOM_HOLD_MS) this.zoomEngaged = true;
+      } else this.aboveSince = null;
+    } else if (force < activation * ZOOM_RELEASE) {
+      this.zoomEngaged = false;
+      this.aboveSince = null;
+    }
+    const pressed = this.zoomEngaged ? clamp((force - activation) / zoomRange(settings.zoomSensitivity), 0, 1) : 0;
+    this.pressureZoom += (pressed - this.pressureZoom) * (1 - Math.pow(0.75, dt * 120));
     const eased = this.pressureZoom * this.pressureZoom * (3 - 2 * this.pressureZoom);
     this.zoom = Math.min(12, (1 + (settings.maxZoom - 1) * eased) * this.manualZoom);
     this.camera.fov = (2 * Math.atan(Math.tan((settings.fieldOfView * DEG) / 2) / this.zoom)) / DEG;

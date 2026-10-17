@@ -30,7 +30,7 @@ Grab the latest build from [Releases](https://github.com/elibullockpapa/photosph
 | Zoom | Scroll, pinch, `+` / `-`, or on a Mac, press harder on the trackpad |
 | Next / previous photo | `→` / `←`, or click a thumbnail |
 | Recenter | `Space` |
-| Settings | ⌘, |
+| Control center | Click the pill at the bottom, or ⌘, |
 
 ### Direction locks (Mac motion)
 
@@ -41,7 +41,9 @@ Grab the latest build from [Releases](https://github.com/elibullockpapa/photosph
 | **Level** | `L` | Keep the horizon level when the laptop leans sideways (on by default) |
 | **Freeze** | `F` | Hold the view still; drag to look around |
 
-Settings cover trackpad pressure sensitivity (with a live pressure meter), maximum zoom, field of view, smoothing, drag speed, and whether the view follows the screen's angle.
+Everything lives in one control center that grows out of the pill at the bottom: your photos, the locks, and screens for **Zoom**, **View** and **Motion**.
+
+**Pressure zoom** does nothing until you press past the *activation pressure*, so ordinary clicks never zoom. Past that point a small extra push takes you to full zoom; *sensitivity* sets how small. The Zoom screen has a live pressure meter showing both points.
 
 360° photos are equirectangular images, twice as wide as they are tall. Most 360° cameras, Google Street View captures and phone panorama modes export them.
 

@@ -1,6 +1,6 @@
 {
   "name": "photosphere",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "View and collect 360° photo spheres. On a Mac, move the laptop to look around.",
   "main": "src/main.js",
   "scripts": {
@@ -18,6 +18,7 @@
     "esbuild": "^0.28.2"
   },
   "dependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
     "three": "^0.186.1"
   },
   "productName": "Photosphere",

@@ -195,7 +195,7 @@ function createWindow() {
     trafficLightPosition: { x: 16, y: 16 },
     webPreferences: { preload: path.join(__dirname, "preload.js"), sandbox: false },
   });
-  window.loadURL("app://local/index.html");
+  window.loadURL(`app://local/index.html${process.env.SNAPSHOT_VIEW ? `?view=${process.env.SNAPSHOT_VIEW}` : ""}`);
   window.webContents.once("did-finish-load", () => {
     if (pendingOpens.length) sendAdded(addPhotos(pendingOpens.splice(0)));
   });
@@ -205,8 +205,7 @@ function createWindow() {
     window.webContents.on("console-message", (event) => console.log("renderer:", event.message));
     window.webContents.once("did-finish-load", () => {
       setTimeout(async () => {
-        if (process.env.SNAPSHOT_SETTINGS) window.webContents.send("open-settings");
-        await new Promise((r) => setTimeout(r, 800));
+        await new Promise((r) => setTimeout(r, 500));
         fs.writeFileSync(process.env.SNAPSHOT, (await window.webContents.capturePage()).toPNG());
         app.quit();
       }, 3000);
