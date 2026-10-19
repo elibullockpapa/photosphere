@@ -19,7 +19,7 @@ Grab the latest build from [Releases](https://github.com/elibullockpapa/photosph
 | Windows | `Photosphere-…-win-x64.exe` |
 | Linux | `Photosphere-…-linux-x86_64.AppImage` |
 
-**First launch on a Mac:** the app isn't notarized by Apple, so macOS blocks it the first time. Open it once, then go to **System Settings → Privacy & Security** and click **Open Anyway**. (Or run `xattr -dr com.apple.quarantine /Applications/Photosphere.app`.)
+Mac builds are signed and notarized by Apple, so they open like any other app.
 
 ## Using it
 

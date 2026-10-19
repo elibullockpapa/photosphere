@@ -1,6 +1,6 @@
 {
   "name": "photosphere",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "View and collect 360° photo spheres. On a Mac, move the laptop to look around.",
   "main": "src/main.js",
   "scripts": {
@@ -65,14 +65,15 @@
         }
       ],
       "category": "public.app-category.photography",
-      "identity": "-",
       "extraResources": [
         {
           "from": "build/photosphere-sensors",
           "to": "photosphere-sensors"
         }
       ],
-      "hardenedRuntime": false
+      "hardenedRuntime": true,
+      "entitlements": "assets/entitlements.mac.plist",
+      "entitlementsInherit": "assets/entitlements.mac.plist"
     },
     "dmg": {
       "title": "Photosphere"
